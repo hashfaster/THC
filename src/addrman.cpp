@@ -3,6 +3,7 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "addrman.h"
+#include "hash.h"
 
 using namespace std;
 
@@ -492,12 +493,12 @@ int CAddrMan::Check_()
 
 void CAddrMan::GetAddr_(std::vector<CAddress> &vAddr)
 {
-    int nNodes = ADDRMAN_GETADDR_MAX_PCT*vRandom.size()/100;
+    size_t nNodes = ADDRMAN_GETADDR_MAX_PCT*vRandom.size()/100;
     if (nNodes > ADDRMAN_GETADDR_MAX)
         nNodes = ADDRMAN_GETADDR_MAX;
 
     // perform a random shuffle over the first nNodes elements of vRandom (selecting from all)
-    for (int n = 0; n<nNodes; n++)
+    for (unsigned int n = 0; n<nNodes; n++)
     {
         int nRndPos = GetRandInt(vRandom.size() - n) + n;
         SwapRandom(n, nRndPos);
@@ -506,7 +507,18 @@ void CAddrMan::GetAddr_(std::vector<CAddress> &vAddr)
     }
 }
 
-void CAddrMan::Connected_(const CService &addr, int64 nTime)
+void CAddrMan::GetOnlineAddr_(std::vector<CAddrInfo> &vAddr)
+{
+    for (std::map<int, CAddrInfo>::const_iterator it = mapInfo.begin(); it != mapInfo.end(); it++)
+    {
+        CAddrInfo addr = it->second;
+        bool fCurrentlyOnline = (GetAdjustedTime() - addr.nTime < nOneDay);
+        if (fCurrentlyOnline)
+            vAddr.push_back(addr);
+    }
+}
+
+void CAddrMan::Connected_(const CService &addr, int64_t nTime)
 {
     CAddrInfo *pinfo = Find(addr);
 
@@ -521,7 +533,7 @@ void CAddrMan::Connected_(const CService &addr, int64 nTime)
         return;
 
     // update info
-    int64 nUpdateInterval = 20 * 60;
+    int64_t nUpdateInterval = 20 * 60;
     if (nTime - info.nTime > nUpdateInterval)
         info.nTime = nTime;
 }
