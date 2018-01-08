@@ -70,9 +70,9 @@ typedef struct HMAC_SHA256Context {
 static void
 HMAC_SHA256_Init(HMAC_SHA256_CTX *ctx, const void *_K, size_t Klen)
 {
-	unsigned char pad[64];
-	unsigned char khash[32];
-	const unsigned char *K = (const unsigned char *)_K;
+	uint8_t pad[64];
+	uint8_t khash[32];
+	const uint8_t *K = (const uint8_t *)_K;
 	size_t i;
 
 	/* If Klen > 64, the key is really SHA256(K). */
@@ -112,9 +112,9 @@ HMAC_SHA256_Update(HMAC_SHA256_CTX *ctx, const void *in, size_t len)
 
 /* Finish an HMAC-SHA256 operation. */
 static void
-HMAC_SHA256_Final(unsigned char digest[32], HMAC_SHA256_CTX *ctx)
+HMAC_SHA256_Final(uint8_t digest[32], HMAC_SHA256_CTX *ctx)
 {
-	unsigned char ihash[32];
+	uint8_t ihash[32];
 
 	/* Finish the inner SHA256 operation. */
 	SHA256_Final(ihash, &ctx->ictx);
@@ -254,7 +254,7 @@ static inline void xor_salsa8(uint32_t B[16], const uint32_t Bx[16])
 	B[15] += x15;
 }
 
-void scrypt_1024_1_1_256_sp_generic(const char *input, char *output, char *scratchpad)
+void scrypt_1024_1_1_256_sp_generic(const uint8_t *input, uint8_t *output, uint8_t *scratchpad)
 {
 	uint8_t B[128];
 	uint32_t X[32];
@@ -289,7 +289,7 @@ void scrypt_1024_1_1_256_sp_generic(const char *input, char *output, char *scrat
 
 #if defined(USE_SSE2)
 // By default, set to generic scrypt function. This will prevent crash in case when scrypt_detect_sse2() wasn't called
-void (*scrypt_1024_1_1_256_sp_detected)(const char *input, char *output, char *scratchpad) = &scrypt_1024_1_1_256_sp_generic;
+void (*scrypt_1024_1_1_256_sp_detected)(const uint8_t *input, uint8_t *output, uint8_t *scratchpad) = &scrypt_1024_1_1_256_sp_generic;
 
 std::string scrypt_detect_sse2()
 {
@@ -363,7 +363,7 @@ uint256 scrypt_legacy(const void* input, size_t datalen, const void* salt, size_
 
 uint256 scrypt_salted_hash(const void* input, size_t inputlen, const void* salt, size_t saltlen)
 {
-    char scratchpad[SCRYPT_SCRATCHPAD_SIZE];
+    uint8_t scratchpad[SCRYPT_SCRATCHPAD_SIZE];
     return scrypt_legacy(input, inputlen, salt, saltlen, scratchpad);
 }
 
@@ -384,7 +384,7 @@ uint256 scrypt_salted_multiround_hash(const void* input, size_t inputlen, const 
 uint256 scrypt_blockhash(const void* input)
 {
     uint256 output;
-    char scratchpad[SCRYPT_SCRATCHPAD_SIZE];
+    uint8_t scratchpad[SCRYPT_SCRATCHPAD_SIZE];
     scrypt_1024_1_1_256_sp(input, (uint8_t*)&output, scratchpad);
     return output;
 }

@@ -8,8 +8,8 @@
 
 static const int SCRYPT_SCRATCHPAD_SIZE = 131072 + 63;
 
-void scrypt_1024_1_1_256(const char *input, char *output);
-void scrypt_1024_1_1_256_sp_generic(const char *input, char *output, char *scratchpad);
+void scrypt_1024_1_1_256(const uint8_t *input, uint8_t *output);
+void scrypt_1024_1_1_256_sp_generic(const uint8_t *input, uint8_t *output, uint8_t *scratchpad);
 uint256 scrypt_salted_multiround_hash(const void* input, size_t inputlen, const void* salt, size_t saltlen, const unsigned int nRounds);
 uint256 scrypt_salted_hash(const void* input, size_t inputlen, const void* salt, size_t saltlen);
 uint256 scrypt_blockhash(const void* input);
@@ -24,8 +24,8 @@ uint256 scrypt_blockhash(const void* input);
 #endif
 
 std::string scrypt_detect_sse2();
-void scrypt_1024_1_1_256_sp_sse2(const char *input, char *output, char *scratchpad);
-extern void (*scrypt_1024_1_1_256_sp_detected)(const char *input, char *output, char *scratchpad);
+void scrypt_1024_1_1_256_sp_sse2(const uint8_t *input, uint8_t *output, uint8_t *scratchpad);
+extern void (*scrypt_1024_1_1_256_sp_detected)(const uint8_t *input, uint8_t *output, uint8_t *scratchpad);
 #else
 #define scrypt_1024_1_1_256_sp(input, output, scratchpad) scrypt_1024_1_1_256_sp_generic((input), (output), (scratchpad))
 #endif
