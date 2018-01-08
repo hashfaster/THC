@@ -325,7 +325,7 @@ std::string scrypt_detect_sse2()
 }
 #endif
 
-uint256 scrypt_legacy(const void* input, size_t datalen, const void* salt, size_t saltlen, void *scratchpad)
+uint256 scrypt_legacy(const uint8_t* input, size_t datalen, const uint8_t* salt, size_t saltlen, void *scratchpad)
 {
 	uint8_t B[128];
 	uint32_t X[32];
@@ -361,27 +361,27 @@ uint256 scrypt_legacy(const void* input, size_t datalen, const void* salt, size_
     return output;
 }
 
-uint256 scrypt_salted_hash(const void* input, size_t inputlen, const void* salt, size_t saltlen)
+uint256 scrypt_salted_hash(const uint8_t* input, size_t inputlen, const uint8_t* salt, size_t saltlen)
 {
     uint8_t scratchpad[SCRYPT_SCRATCHPAD_SIZE];
     return scrypt_legacy(input, inputlen, salt, saltlen, scratchpad);
 }
 
-uint256 scrypt_salted_multiround_hash(const void* input, size_t inputlen, const void* salt, size_t saltlen, const unsigned int nRounds)
+uint256 scrypt_salted_multiround_hash(const uint8_t* input, size_t inputlen, const uint8_t* salt, size_t saltlen, const unsigned int nRounds)
 {
     uint256 resultHash = scrypt_salted_hash(input, inputlen, salt, saltlen);
     uint256 transitionalHash = resultHash;
 
     for(unsigned int i = 1; i < nRounds; i++)
     {
-        resultHash = scrypt_salted_hash(input, inputlen, (const void*)&transitionalHash, 32);
+        resultHash = scrypt_salted_hash(input, inputlen, (const uint8_t*)&transitionalHash, 32);
         transitionalHash = resultHash;
     }
 
     return resultHash;
 }
 
-uint256 scrypt_blockhash(const void* input)
+uint256 scrypt_blockhash(const uint8_t* input)
 {
     uint256 output;
     uint8_t scratchpad[SCRYPT_SCRATCHPAD_SIZE];

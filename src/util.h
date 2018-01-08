@@ -35,9 +35,6 @@
 
 #include "netbase.h" // for AddTimeData
 
-typedef long long  int64;
-typedef unsigned long long  uint64;
-
 static const int32_t nOneHour = 60 * 60;
 static const int32_t nOneDay = 24 * 60 * 60;
 static const int64_t nOneWeek = 7 * 24 * 60 * 60;

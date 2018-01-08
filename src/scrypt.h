@@ -10,9 +10,9 @@ static const int SCRYPT_SCRATCHPAD_SIZE = 131072 + 63;
 
 void scrypt_1024_1_1_256(const uint8_t *input, uint8_t *output);
 void scrypt_1024_1_1_256_sp_generic(const uint8_t *input, uint8_t *output, uint8_t *scratchpad);
-uint256 scrypt_salted_multiround_hash(const void* input, size_t inputlen, const void* salt, size_t saltlen, const unsigned int nRounds);
-uint256 scrypt_salted_hash(const void* input, size_t inputlen, const void* salt, size_t saltlen);
-uint256 scrypt_blockhash(const void* input);
+uint256 scrypt_salted_multiround_hash(const uint8_t* input, size_t inputlen, const uint8_t* salt, size_t saltlen, const unsigned int nRounds);
+uint256 scrypt_salted_hash(const uint8_t* input, size_t inputlen, const uint8_t* salt, size_t saltlen);
+uint256 scrypt_blockhash(const uint8_t* input);
 
 #if defined(USE_SSE2)
 #include <string>
