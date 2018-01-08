@@ -2,7 +2,7 @@
 # Distributed under the MIT/X11 software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-USE_UPNP:=0
+USE_UPNP:=-
 USE_IPV6:=1
 
 LINK:=$(CXX)
@@ -105,7 +105,7 @@ xCXXFLAGS=$(xOPT_LEVEL) $(EXT_OPTIONS) -pthread -Wall -Wextra -Wno-ignored-quali
 
 # LDFLAGS can be specified on the make command line, so we use xLDFLAGS that only
 # adds some defaults in front. Unfortunately, LDFLAGS=... $(LDFLAGS) does not work.
-xLDFLAGS=$(LDHARDENING) $(LDFLAGS)
+xLDFLAGS=$(LDHARDENING) $(LDFLAGS) -s
 
 OBJS= \
     obj/alert.o \
