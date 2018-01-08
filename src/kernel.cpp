@@ -331,11 +331,11 @@ bool CheckStakeKernelHash(uint32_t nBits, const CBlock& blockFrom, uint32_t nTxP
 
     if(nTimeTx < 1485907200) // feb 1st 2017 midnight GMT + 0
     {
-        bnCoinDayWeight = CBigNum(nValueIn) * GetWeight((int64)txPrev.nTime, (int64)nTimeTx) / COIN / (24 * 60 * 60);
+        bnCoinDayWeight = CBigNum(nValueIn) * GetWeight((int64_t)txPrev.nTime, (int64_t)nTimeTx) / COIN / (24 * 60 * 60);
     }
     else
     {
-        bnCoinDayWeight = CBigNum(nValueIn) * GetWeight((int64)txPrev.nTime, (int64)nTimeTx) / (24 * 60 * 60);
+        bnCoinDayWeight = CBigNum(nValueIn) * GetWeight((int64_t)txPrev.nTime, (int64_t)nTimeTx) / (24 * 60 * 60);
     }
 
 

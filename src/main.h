@@ -36,19 +36,19 @@ static const unsigned int MAX_BLOCK_SIGOPS = MAX_BLOCK_SIZE/50;
 static const unsigned int MAX_ORPHAN_TRANSACTIONS = MAX_BLOCK_SIZE/100;
 static const unsigned int MAX_INV_SZ = 50000;
 
-static const int64 MIN_TX_FEE = 2 * CENT;
-static const int64 MIN_RELAY_TX_FEE = MIN_TX_FEE;
+static const int64_t MIN_TX_FEE = 2 * CENT;
+static const int64_t MIN_RELAY_TX_FEE = MIN_TX_FEE;
 
-static const int64 MAX_MONEY = 250000000 * COIN;
-static const int64 MIN_TXOUT_AMOUNT = CENT/100;
+static const int64_t MAX_MONEY = 250000000 * COIN;
+static const int64_t MIN_TXOUT_AMOUNT = CENT/100;
 
 static const int HEMPCOIN_SWITCHOVER_BLOCK = 1;	// block to switch to fixed diff re-adjustment algorithm (fix out of sequence)
 static const int HEMPCOIN_SWITCHOVER1_BLOCK = 2;	// block to switch to fixed diff re-adjustment algorithm (change max PoW adjust to 3X)
 static const int HEMPCOIN_SWITCHOVER2_BLOCK = 3;	// block to switch to delayed bonus block reward
 
-static const int64 MAX_MINT_PROOF_OF_STAKE = 0.05 * COIN;	// 5% annual interest
+static const int64_t MAX_MINT_PROOF_OF_STAKE = 0.05 * COIN;	// 5% annual interest
 
-inline bool MoneyRange(int64 nValue) { return (nValue >= 0 && nValue <= MAX_MONEY); }
+inline bool MoneyRange(int64_t nValue) { return (nValue >= 0 && nValue <= MAX_MONEY); }
 // Threshold for nLockTime: below this value it is interpreted as block number, otherwise as UNIX timestamp.
 static const unsigned int LOCKTIME_THRESHOLD = 500000000; // Tue Nov  5 00:53:20 1985 UTC
 // Maximum number of script-checking threads allowed
@@ -128,11 +128,11 @@ void ThreadScriptCheckQuit();
 
 bool CheckProofOfWork(uint256 hash, unsigned int nBits);
 unsigned int GetNextTargetRequired(const CBlockIndex* pindexLast, bool fProofOfStake);
-int64 GetProofOfWorkReward(int nHeight, int64 nFees, uint256 prevHash);
-int64 GetProofOfWorkBlockBonusRewardFactor(CBlockIndex* pindex);
-int64 GetProofOfStakeReward(int64 nCoinAge, unsigned int nBits, unsigned int nTime);
-unsigned int ComputeMinWork(unsigned int nBase, int64 nTime);
-unsigned int ComputeMinStake(unsigned int nBase, int64 nTime, unsigned int nBlockTime);
+int64_t GetProofOfWorkReward(int nHeight, int64_t nFees, uint256 prevHash);
+int64_t GetProofOfWorkBlockBonusRewardFactor(CBlockIndex* pindex);
+int64_t GetProofOfStakeReward(int64_t nCoinAge, unsigned int nBits, unsigned int nTime);
+unsigned int ComputeMinWork(unsigned int nBase, int64_t nTime);
+unsigned int ComputeMinStake(unsigned int nBase, int64_t nTime, unsigned int nBlockTime);
 int GetNumBlocksOfPeers();
 bool IsInitialBlockDownload();
 std::string GetWarnings(std::string strFor);

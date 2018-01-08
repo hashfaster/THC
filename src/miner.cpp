@@ -168,7 +168,7 @@ CBlock* CreateNewBlock(CWallet* pwallet, CTransaction *txCoinStake)
 
 	// Check if the previous block was a bonus block and create a reward tx if necessary
     // The reward tx will be a copy of the bonus block coinbase tx with the outputs adjusted proportionally
-    int64 nBonusReward = GetProofOfWorkBlockBonusRewardFactor(pindexPrev);
+    int64_t nBonusReward = GetProofOfWorkBlockBonusRewardFactor(pindexPrev);
     if (nBonusReward > 0)
     {
         CBlock prevBlock;

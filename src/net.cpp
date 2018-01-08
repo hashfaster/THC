@@ -1330,7 +1330,7 @@ void ThreadOpenConnections2(void* parg)
     }
 
     // Initiate network connections
-    int64 nStart = GetTime();
+    int64_t nStart = GetTime();
     while (true)
     {
         ProcessOneShot();

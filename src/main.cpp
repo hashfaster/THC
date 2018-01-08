@@ -541,13 +541,13 @@ bool CTransaction::CheckTransaction() const
     return true;
 }
 
-int64 CTransaction::GetMinFee(unsigned int nBlockSize, bool fAllowFree, enum GetMinFee_mode mode, unsigned int nBytes) const
+int64_t CTransaction::GetMinFee(unsigned int nBlockSize, bool fAllowFree, enum GetMinFee_mode mode, unsigned int nBytes) const
 {
     // Use new fees approach if we are on test network or 
     //    switch date has been reached
     bool fNewApproach = fTestNet || nTime > FEE_SWITCH_TIME;
 
-    int64 nMinTxFee = MIN_TX_FEE, nMinRelayTxFee = MIN_RELAY_TX_FEE;
+    int64_t nMinTxFee = MIN_TX_FEE, nMinRelayTxFee = MIN_RELAY_TX_FEE;
 
     if(!fNewApproach || IsCoinStake())
     {
@@ -557,10 +557,10 @@ int64 CTransaction::GetMinFee(unsigned int nBlockSize, bool fAllowFree, enum Get
     }
 
     // Base fee is either nMinTxFee or nMinRelayTxFee
-    int64 nBaseFee = (mode == GMF_RELAY) ? nMinRelayTxFee : nMinTxFee;
+    int64_t nBaseFee = (mode == GMF_RELAY) ? nMinRelayTxFee : nMinTxFee;
 
     unsigned int nNewBlockSize = nBlockSize + nBytes;
-    int64 nMinFee = (1 + (int64)nBytes / 1000) * nBaseFee;
+    int64_t nMinFee = (1 + (int64_t)nBytes / 1000) * nBaseFee;
 
     if (fNewApproach)
     {
@@ -1048,12 +1048,12 @@ int get9Counts(uint256 hash)
 	return count;
 }
 
-static const int64 nMinSubsidy = 1 * COIN;
+static const int64_t nMinSubsidy = 1 * COIN;
 
 // miner's coin base reward based on nBits
-int64 GetProofOfWorkReward(int nHeight, int64 nFees, uint256 prevHash)
+int64_t GetProofOfWorkReward(int nHeight, int64_t nFees, uint256 prevHash)
 {
-	int64 nSubsidy = 125 * COIN;
+	int64_t nSubsidy = 125 * COIN;
 
 	if(nHeight < 25001) {nSubsidy = 1000 * COIN;}
     else if (nHeight < 35001) {nSubsidy = 500 * COIN;}
@@ -1066,7 +1066,7 @@ int64 GetProofOfWorkReward(int nHeight, int64 nFees, uint256 prevHash)
 }
 
 // miner's coin base bonus block extra reward
-int64 GetProofOfWorkBlockBonusRewardFactor(CBlockIndex* pindex) 
+int64_t GetProofOfWorkBlockBonusRewardFactor(CBlockIndex* pindex) 
 {
 	if (pindex->nHeight < HEMPCOIN_SWITCHOVER2_BLOCK || !pindex->IsProofOfWork())
 	    return 0;
@@ -1087,24 +1087,24 @@ int64 GetProofOfWorkBlockBonusRewardFactor(CBlockIndex* pindex)
 
 // minter's coin stake reward based on nBits and coin age spent (coin-days)
 // simple algorithm, not depend on the diff
-int64 GetProofOfStakeReward(int64 nCoinAge, unsigned int nBits, unsigned int nTime)
+int64_t GetProofOfStakeReward(int64_t nCoinAge, unsigned int nBits, unsigned int nTime)
 {
-    int64 nRewardCoinYear;
+    int64_t nRewardCoinYear;
 
 	nRewardCoinYear = MAX_MINT_PROOF_OF_STAKE;
 
-    int64 nSubsidy = nCoinAge * nRewardCoinYear / 365;
+    int64_t nSubsidy = nCoinAge * nRewardCoinYear / 365;
 
 	if (fDebug && GetBoolArg("-printcreation"))
         printf("GetProofOfStakeReward(): create=%s nCoinAge=%"PRId64" nBits=%d\n", FormatMoney(nSubsidy).c_str(), nCoinAge, nBits);
     return nSubsidy;
 }
 
-static const int64 nTargetTimespan = 30 * 30;  
-static const int64 nTargetSpacingWorkMax = 12 * nStakeTargetSpacing; 
+static const int64_t nTargetTimespan = 30 * 30;  
+static const int64_t nTargetSpacingWorkMax = 12 * nStakeTargetSpacing; 
 
 // get proof of work blocks max spacing according to hard-coded conditions
-int64 inline GetTargetSpacingWorkMax(int nHeight, unsigned int nTime)
+int64_t inline GetTargetSpacingWorkMax(int nHeight, unsigned int nTime)
 {
     if(fTestNet)
         return 3 * nStakeTargetSpacing; // 15 minutes on testNet
@@ -1176,7 +1176,7 @@ unsigned int GetNextTargetRequired(const CBlockIndex* pindexLast, bool fProofOfS
         return bnTargetLimit.GetCompact(); // second block
     }
 
-    int64 nActualSpacing = pindexPrev->GetBlockTime() - pindexPrevPrev->GetBlockTime();
+    int64_t nActualSpacing = pindexPrev->GetBlockTime() - pindexPrevPrev->GetBlockTime();
 	if(pindexLast->nHeight > HEMPCOIN_SWITCHOVER_BLOCK)
 	{
 		if(nActualSpacing < 0)
@@ -1196,14 +1196,14 @@ unsigned int GetNextTargetRequired(const CBlockIndex* pindexLast, bool fProofOfS
     CBigNum bnNew;
     bnNew.SetCompact(pindexPrev->nBits);
 	
-	int64 nTargetSpacingWorkMax0 = nTargetSpacingWorkMax;
+	int64_t nTargetSpacingWorkMax0 = nTargetSpacingWorkMax;
 	if(pindexLast->nHeight > HEMPCOIN_SWITCHOVER1_BLOCK)	// from HEMPCOIN_SWITCHOVER1_BLOCK, nTargetSpacingWorkMax0 is set to 3 * nStakeTargetSpacing
 	{
         nTargetSpacingWorkMax0 = 3 * nStakeTargetSpacing;
 	}
 
-    int64 nTargetSpacing = fProofOfStake? nStakeTargetSpacing : min(nTargetSpacingWorkMax0, (int64) nStakeTargetSpacing * (1 + pindexLast->nHeight - pindexPrev->nHeight));
-    int64 nInterval = nTargetTimespan / nTargetSpacing;
+    int64_t nTargetSpacing = fProofOfStake? nStakeTargetSpacing : min(nTargetSpacingWorkMax0, (int64_t) nStakeTargetSpacing * (1 + pindexLast->nHeight - pindexPrev->nHeight));
+    int64_t nInterval = nTargetTimespan / nTargetSpacing;
     bnNew *= ((nInterval - 1) * nTargetSpacing + nActualSpacing + nActualSpacing);
     bnNew /= ((nInterval + 1) * nTargetSpacing);
 
@@ -1551,10 +1551,10 @@ bool CTransaction::ConnectInputs(CTxDB& txdb, MapPrevTx inputs, map<uint256, CTx
         if (IsCoinStake())
         {
             // ppcoin: coin stake tx earns reward instead of paying fee
-            uint64 nCoinAge;
+            uint64_t nCoinAge;
             if (!GetCoinAge(txdb, nCoinAge))
                 return error("ConnectInputs() : %s unable to get coin age for coinstake", GetHash().ToString().substr(0,10).c_str());
-            int64 nStakeReward = GetValueOut() - nValueIn;
+            int64_t nStakeReward = GetValueOut() - nValueIn;
             if (nStakeReward > GetProofOfStakeReward(nCoinAge, pindexBlock->nBits, nTime) - GetMinFee() + MIN_TX_FEE)
                 return DoS(100, error("ConnectInputs() : %s stake reward exceeded", GetHash().ToString().substr(0,10).c_str()));
         }
@@ -2254,13 +2254,13 @@ bool CBlock::CheckBlock(bool fCheckPOW, bool fCheckMerkleRoot, bool fCheckSig) c
     if (!fProtocol048)
     {
         // Check coinbase timestamp
-        if (GetBlockTime() < (int64)vtx[0].nTime)
+        if (GetBlockTime() < (int64_t)vtx[0].nTime)
             return DoS(100, error("CheckBlock() : coinbase timestamp violation"));
     }
     else
     {
         // Check coinbase timestamp
-        if (GetBlockTime() < PastDrift((int64)vtx[0].nTime))
+        if (GetBlockTime() < PastDrift((int64_t)vtx[0].nTime))
             return DoS(50, error("CheckBlock() : coinbase timestamp is too late"));
     }
 
@@ -2320,7 +2320,7 @@ bool CBlock::AcceptBlock()
         return error("AcceptBlock() : block's timestamp is too early");
 
 	// Check that bonus block reward tx is present when necessary and absent otherwise
-    int64 nBonusReward = GetProofOfWorkBlockBonusRewardFactor(pindexPrev);
+    int64_t nBonusReward = GetProofOfWorkBlockBonusRewardFactor(pindexPrev);
     for (unsigned i = 1; i < vtx.size(); i++)
 	if (vtx[i].IsCoinBase())
 	{
@@ -3703,7 +3703,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
     {
         if (pfrom->nVersion > BIP0031_VERSION)
         {
-            uint64 nonce = 0;
+            uint64_t nonce = 0;
             vRecv >> nonce;
             // Echo the message back with the nonce. This allows for two useful features:
             //
